@@ -1,0 +1,23 @@
+name: Training Pipeline - Daily
+
+on:
+  schedule:
+    - cron: '0 2 * * *'   # 2 AM UTC (adjust to your time)
+  workflow_dispatch:
+
+jobs:
+  run-training:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run training
+        env:
+          AQICN_API_KEY: ${{ secrets.60038d98bed53177c5f7ea975cfa098d51faec62 }}
+          HOPSWORKS_API_KEY: ${{ secrets.1VSOfV8KnLj4veo8.3BGkPgd7gSdb4N153NfOWbQlqXag7PdnAyz6Smm66iX90NuiugH5IamzQS390jsN }}
+          HOPSWORKS_PROJECT_NAME: ${{ secrets.aqi_project1 }}
+        run: python src/training_pipeline.py
